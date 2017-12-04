@@ -1,10 +1,12 @@
 package com.example.ana.volunteerwork.database;
 
+import java.io.Serializable;
+
 /**
  * Created by gabri on 04/12/2017.
  */
 
-public class Evento {
+public class Evento implements Serializable {
     String nome,descricao, datIni, datFim, horaIni, horaFim, endereco;
 
     public Evento() {

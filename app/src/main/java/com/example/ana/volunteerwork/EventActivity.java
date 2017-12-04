@@ -8,17 +8,23 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.ana.volunteerwork.database.Evento;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class EventActivity extends AppCompatActivity {
 
     TextView nomeEventoTV;
-    TextView dataEventoTV;
+    TextView desEventoTV;
+    TextView endEventoTV;
+    //TextView dataEventoTV;
     TextView horaEventoTV;
 
 
     String nomeEvento,
+            desEvento,
+            endEvento,
             dataEventoIni,
             dataEventoFim,
             horaIniEvento,
@@ -30,28 +36,37 @@ public class EventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event);
 
         nomeEventoTV = (TextView) findViewById(R.id.textViewNomeEvento);
-        dataEventoTV = (TextView) findViewById(R.id.textViewDataEvento);
+        //dataEventoTV = (TextView) findViewById(R.id.textViewDataEvento);
         horaEventoTV = (TextView) findViewById(R.id.textViewHoraEvento);
+        desEventoTV = (TextView) findViewById(R.id.textViewDescricaoEvento);
+        endEventoTV = (TextView) findViewById(R.id.textViewEnderecoEvento);
 
         Intent intent = getIntent();
         if ( intent != null ) {
             Bundle params = intent.getExtras();
             if (params != null ) {
-                nomeEvento = params.getString("nomeEvento");
-                nomeEventoTV.setText(nomeEvento);
-                /*dataEventoIni = params.getString("dataEventoIni");
-                dataEventoFim = params.getString("dataEventoFim");
-                horaIniEvento = params.getString("horaIniEvento");
-                horaEndEvento = params.getString("horaEndEvento");
+                Evento evento = (Evento) params.getSerializable("evento");
+                nomeEvento = evento.getNome();
+                desEvento = evento.getDescricao();
+                endEvento = evento.getEndereco();
+                dataEventoIni = evento.getDatIni();
+                dataEventoFim = evento.getDatFim();
+                horaIniEvento = evento.getHoraIni();
+                horaEndEvento = evento.getHoraFim();
 
                 nomeEventoTV.setText(nomeEvento);
+                desEventoTV.setText(desEvento);
+                endEventoTV.setText(endEvento);
+
+
+
                 String [] dataIni = dataEventoIni.split("/");
                 String [] dataFim = dataEventoFim.split("/");
                 String mesIni = retornaMes(Integer.parseInt(dataIni[1]));
                 String mesFim = retornaMes(Integer.parseInt(dataFim[1]));
 
-                horaEventoTV.setText(dataIni[0] + " de " + mesIni + " às "+ horaIniEvento+ " a " + dataFim[0] + " de " + mesFim + " às " + horaEndEvento);
-            */
+                horaEventoTV.setText(dataIni[0] + " de " + mesIni + " às "+ horaIniEvento+ " até " + dataFim[0] + " de " + mesFim + " às " + horaEndEvento);
+
             }
         }
 

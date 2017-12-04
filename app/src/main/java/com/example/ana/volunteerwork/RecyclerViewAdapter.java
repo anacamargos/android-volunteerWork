@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.ana.volunteerwork.database.Evento;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,11 +17,11 @@ import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    ArrayList<String> listaDeEventos;
+    ArrayList<Evento> listaDeEventos;
     View view;
     ViewHolder viewHolder;
 
-    public RecyclerViewAdapter ( ArrayList<String> listaDeEventos) {
+    public RecyclerViewAdapter ( ArrayList<Evento> listaDeEventos) {
         this.listaDeEventos = listaDeEventos;
     }
 
@@ -32,8 +34,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(final RecyclerViewAdapter.ViewHolder holder, int position) {
-
-        String var =  listaDeEventos.get(position);
+        Evento evento = listaDeEventos.get(position);
+        String var =  evento.getNome();
         holder.nomeEventoTV.setText(var);
     }
 

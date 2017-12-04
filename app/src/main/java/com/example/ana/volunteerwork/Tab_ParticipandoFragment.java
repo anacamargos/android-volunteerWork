@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.ana.volunteerwork.database.Evento;
+
 import java.util.ArrayList;
 
 
@@ -21,7 +23,7 @@ public class Tab_ParticipandoFragment extends Fragment {
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerViewAdapter recyclerViewAdapter;
-    ArrayList<String> listaDeEventosParticipando;
+    ArrayList<Evento> listaDeEventosParticipando;
 
 
     public Tab_ParticipandoFragment() {
@@ -35,9 +37,13 @@ public class Tab_ParticipandoFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tab__participando, container, false);
 
-        listaDeEventosParticipando = new ArrayList<String>();
-        listaDeEventosParticipando.add("Evento na casa da Carol");
-        listaDeEventosParticipando.add("Festa do OiOiOi");
+        listaDeEventosParticipando = new ArrayList<Evento>();
+
+        Evento evento = new Evento ("Festa do Miguel", "Muita comida!", "06/12/2017","07/12/2017", "10:00", "10:00", "Rua Pistóia, 325");
+        Evento eventoNovo = new Evento ("Festa do Joaozinho", "Só track boa", "11/12/2017","12/12/2017", "10:00", "10:00", "Rua Gongalves Dias, 2132");
+
+        listaDeEventosParticipando.add(evento);
+        listaDeEventosParticipando.add(eventoNovo);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         layoutManager = new LinearLayoutManager(getActivity());
@@ -49,7 +55,8 @@ public class Tab_ParticipandoFragment extends Fragment {
             @Override public void onItemClick(View view, int position) {
                 // do whatever
                 Bundle params = new Bundle();
-                params.putString("nomeEvento", listaDeEventosParticipando.get(position));
+                params.putSerializable("evento",listaDeEventosParticipando.get(position));
+                //params.putString("nomeEvento", listaDeEventosParticipando.get(position));
                 //params.putString("dataEventoIni", nDataEditText.getText().toString());
                 //params.putString("dataEventoFim", nDataEndEditText.getText().toString());
                 //params.putString("horaIniEvento", nTimeEditText.getText().toString());

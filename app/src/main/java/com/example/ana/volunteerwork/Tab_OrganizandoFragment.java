@@ -14,6 +14,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.ana.volunteerwork.database.Evento;
+
 import java.util.ArrayList;
 
 
@@ -25,7 +27,7 @@ public class Tab_OrganizandoFragment extends Fragment {
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerViewAdapter recyclerViewAdapter;
-    ArrayList<String> listaDeEventos;
+    ArrayList<Evento> listaDeEventos;
     public static final int RESULT_OK = 0;
 
 
@@ -40,9 +42,11 @@ public class Tab_OrganizandoFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tab__organizando, container, false);
 
-        listaDeEventos = new ArrayList<String>();
-        listaDeEventos.add("Evento na casa da Ana");
-        listaDeEventos.add("Festa do Gabriel");
+        listaDeEventos = new ArrayList<Evento>();
+        Evento evento = new Evento ("Festa da Ana", "Melhor Festa!", "04/12/2017","05/12/2017", "10:00", "10:00", "Rua Pistóia, 325");
+        Evento eventoNovo = new Evento ("Festa do Gabriel", "Uhuuul!", "10/12/2017","11/12/2017", "10:00", "10:00", "Rua Gongalves Dias, 2132");
+        listaDeEventos.add(evento);
+        listaDeEventos.add(eventoNovo);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         layoutManager = new LinearLayoutManager(getActivity());
@@ -54,7 +58,8 @@ public class Tab_OrganizandoFragment extends Fragment {
             @Override public void onItemClick(View view, int position) {
                 // do whatever
                 Bundle params = new Bundle();
-                params.putString("nomeEvento", listaDeEventos.get(position));
+                params.putSerializable("evento",listaDeEventos.get(position));
+                //params.putString("nomeEvento", listaDeEventos.get(position));
                 //params.putString("dataEventoIni", nDataEditText.getText().toString());
                 //params.putString("dataEventoFim", nDataEndEditText.getText().toString());
                 //params.putString("horaIniEvento", nTimeEditText.getText().toString());
