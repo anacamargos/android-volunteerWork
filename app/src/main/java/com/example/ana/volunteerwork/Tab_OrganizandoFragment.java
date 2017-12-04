@@ -1,11 +1,14 @@
 package com.example.ana.volunteerwork;
 
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -43,6 +46,27 @@ public class Tab_OrganizandoFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerViewAdapter = new RecyclerViewAdapter(listaDeEventos);
         recyclerView.setAdapter(recyclerViewAdapter);
+
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+            @Override public void onItemClick(View view, int position) {
+                // do whatever
+                Bundle params = new Bundle();
+                params.putString("nomeEvento", listaDeEventos.get(position));
+                //params.putString("dataEventoIni", nDataEditText.getText().toString());
+                //params.putString("dataEventoFim", nDataEndEditText.getText().toString());
+                //params.putString("horaIniEvento", nTimeEditText.getText().toString());
+                //params.putString("horaEndEvento", nTimeEndEditText.getText().toString());
+
+
+                Intent intent = new Intent(getContext(), EventActivity.class);
+                intent.putExtras(params);
+                startActivity(intent);
+            }
+
+            @Override public void onLongItemClick(View view, int position) {
+                // do whatever
+            }
+        }));
 
         return view;
     }

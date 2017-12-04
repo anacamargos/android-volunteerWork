@@ -1,6 +1,7 @@
 package com.example.ana.volunteerwork;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,14 +36,35 @@ public class Tab_ParticipandoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tab__participando, container, false);
 
         listaDeEventosParticipando = new ArrayList<String>();
-        listaDeEventosParticipando.add("Evento na casa da Ana");
-        listaDeEventosParticipando.add("Festa do Gabriel");
+        listaDeEventosParticipando.add("Evento na casa da Carol");
+        listaDeEventosParticipando.add("Festa do OiOiOi");
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerViewAdapter = new RecyclerViewAdapter(listaDeEventosParticipando);
         recyclerView.setAdapter(recyclerViewAdapter);
+
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+            @Override public void onItemClick(View view, int position) {
+                // do whatever
+                Bundle params = new Bundle();
+                params.putString("nomeEvento", listaDeEventosParticipando.get(position));
+                //params.putString("dataEventoIni", nDataEditText.getText().toString());
+                //params.putString("dataEventoFim", nDataEndEditText.getText().toString());
+                //params.putString("horaIniEvento", nTimeEditText.getText().toString());
+                //params.putString("horaEndEvento", nTimeEndEditText.getText().toString());
+
+
+                Intent intent = new Intent(getContext(), EventActivity.class);
+                intent.putExtras(params);
+                startActivity(intent);
+            }
+
+            @Override public void onLongItemClick(View view, int position) {
+                // do whatever
+            }
+        }));
 
         return view;
     }
