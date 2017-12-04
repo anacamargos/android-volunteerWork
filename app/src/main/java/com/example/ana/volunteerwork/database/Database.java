@@ -24,7 +24,7 @@ public class Database {
 
 
     /**
-     * PASS DATA BAE REFERENCE
+     * PASS DATA BASE REFERENCE
      */
 
     public Database (DatabaseReference db) {
