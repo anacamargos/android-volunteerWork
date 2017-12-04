@@ -1,11 +1,14 @@
 package com.example.ana.volunteerwork;
 
 import android.content.Intent;
+import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class EventActivity extends AppCompatActivity {
 
@@ -81,5 +84,43 @@ public class EventActivity extends AppCompatActivity {
             retorno = "dezembro";
         }
         return retorno;
+    }
+
+    public void cadastrarNaAgenda ( View view ) {
+
+        String [] infosDataIni = dataEventoIni.split("/");
+        int anoIni = Integer.parseInt(infosDataIni[0]);
+        int mesIni = Integer.parseInt(infosDataIni[1]);
+        int diaIni = Integer.parseInt(infosDataIni[2]);
+
+        String [] infosHoraIni = horaIniEvento.split(":");
+        int horaIni = Integer.parseInt(infosHoraIni[0]);
+        int minutoIni = Integer.parseInt(infosHoraIni[1]);
+
+        String [] infosDataFim = dataEventoFim.split("/");
+        int anoFim = Integer.parseInt(infosDataFim[0]);
+        int mesFim = Integer.parseInt(infosDataFim[1]);
+        int diaFim = Integer.parseInt(infosDataFim[2]);
+
+        String [] infosHoraFim = horaEndEvento.split(":");
+        int horaFim = Integer.parseInt(infosHoraFim[0]);
+        int minutoFim = Integer.parseInt(infosHoraFim[1]);
+
+
+
+        Calendar calendarIni = Calendar.getInstance();
+        calendarIni.set(anoIni,mesIni,diaIni,horaIni,minutoIni);
+
+        Calendar calendarFim = Calendar.getInstance();
+        calendarFim.set(anoFim,mesFim,diaFim,horaFim,minutoFim);
+
+        Intent intent2 = new Intent(Intent.ACTION_INSERT);
+        //intent2.setType("vnd.android.cursor.item/event");
+        intent2.setData(CalendarContract.Events.CONTENT_URI);
+        intent2.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,calendarIni.getTimeInMillis());
+        intent2.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, calendarFim.getTimeInMillis());
+        intent2.putExtra(CalendarContract.Events.TITLE, nomeEvento);
+
+        startActivity(intent2);
     }
 }
