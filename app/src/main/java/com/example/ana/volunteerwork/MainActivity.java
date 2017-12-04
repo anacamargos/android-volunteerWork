@@ -88,7 +88,9 @@ public class MainActivity extends AppCompatActivity
         fragmentManager = getSupportFragmentManager();
 
         if (id == R.id.nav_mapa) {
-            // Handle the camera action
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.add(R.id.frame_layout, new MapsActivity(), "MapsFragment");
+            transaction.commitAllowingStateLoss();
         } else if (id == R.id.nav_evento) {
 
             FragmentTransaction ft = fragmentManager.beginTransaction();//.replace(R.id.coordinator_layout, new TransitionFragment()).commit();
