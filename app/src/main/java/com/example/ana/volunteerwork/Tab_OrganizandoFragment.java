@@ -4,6 +4,8 @@ package com.example.ana.volunteerwork;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +26,7 @@ public class Tab_OrganizandoFragment extends Fragment {
     RecyclerView.LayoutManager layoutManager;
     RecyclerViewAdapter recyclerViewAdapter;
     ArrayList<String> listaDeEventos;
+    public static final int RESULT_OK = 0;
 
 
     public Tab_OrganizandoFragment() {
@@ -68,7 +71,31 @@ public class Tab_OrganizandoFragment extends Fragment {
             }
         }));
 
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
+
+                /*Intent intent = new Intent(getContext(), EventActivity.class);
+                intent.putExtras(params);
+                startActivity(intent); FOR RESULT*/
+
+                Intent intent = new Intent(getContext(), CadastroEventoActivity.class);
+                startActivityForResult(intent,RESULT_OK);
+            }
+        });
+
         return view;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // ATUALIZAR O ARRAYLIST DE EVENTOS
+        // GERAR NOVA RECYCLER VIEW
+        //recyclerViewAdapter = new RecyclerViewAdapter(this, listaDeConvidados);
+        //recyclerView.setAdapter(recyclerViewAdapter);
+    }
 }
