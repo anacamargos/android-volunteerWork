@@ -136,4 +136,14 @@ public class EventActivity extends AppCompatActivity {
         }
 
     }
+
+    public void enviarWpp ( View view) {
+        String mensagem = "Não se esqueça do meu evento no dia " + dataEventoIni + ", que começa às " + horaIniEvento + ", e vai até " + dataEventoFim + " às " + horaEndEvento + ".";
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, mensagem);
+        sendIntent.setType("text/plain");
+        sendIntent.setPackage("com.whatsapp");
+        startActivity(Intent.createChooser(sendIntent, ""));
+    }
 }
