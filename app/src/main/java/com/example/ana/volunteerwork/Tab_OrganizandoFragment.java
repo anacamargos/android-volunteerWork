@@ -14,7 +14,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.ana.volunteerwork.database.Database;
 import com.example.ana.volunteerwork.database.Evento;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -30,6 +33,9 @@ public class Tab_OrganizandoFragment extends Fragment {
     ArrayList<Evento> listaDeEventos;
     public static final int RESULT_OK = 0;
 
+    DatabaseReference db;
+    Database helper;
+
 
     public Tab_OrganizandoFragment() {
         // Required empty public constructor
@@ -41,6 +47,9 @@ public class Tab_OrganizandoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tab__organizando, container, false);
+
+        db = FirebaseDatabase.getInstance().getReference();
+        helper = new Database(db);
 
         listaDeEventos = new ArrayList<Evento>();
         Evento evento = new Evento ("Festa da Ana", "Melhor Festa!", "04/12/2017","05/12/2017", "10:00", "10:00", "Rua Pistóia, 325");
@@ -98,6 +107,30 @@ public class Tab_OrganizandoFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        this.listaDeEventos = helper.retrieve();
+        if(listaDeEventos.isEmpty()) {
+            System.out.println("TA VAZIOOOO");
+            System.out.println("TA VAZIOOOO");
+            System.out.println("TA VAZIOOOO");
+            System.out.println("TA VAZIOOOO");
+            System.out.println("TA VAZIOOOO");
+            System.out.println("TA VAZIOOOO");
+            System.out.println("TA VAZIOOOO");
+        } else {
+            System.out.println(listaDeEventos.get(0).getNome());
+            System.out.println(listaDeEventos.get(0).getNome());
+            System.out.println(listaDeEventos.get(0).getNome());
+            System.out.println(listaDeEventos.get(0).getNome());
+            System.out.println(listaDeEventos.get(0).getNome());
+            System.out.println(listaDeEventos.get(0).getNome());
+            System.out.println(listaDeEventos.get(0).getNome());
+            System.out.println(listaDeEventos.get(0).getNome());
+            System.out.println(listaDeEventos.get(0).getNome());
+        }
+
+
+        recyclerViewAdapter = new RecyclerViewAdapter(listaDeEventos);
+        recyclerView.setAdapter(recyclerViewAdapter);
         // ATUALIZAR O ARRAYLIST DE EVENTOS
         // GERAR NOVA RECYCLER VIEW
         //recyclerViewAdapter = new RecyclerViewAdapter(this, listaDeConvidados);
