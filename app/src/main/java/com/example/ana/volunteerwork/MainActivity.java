@@ -14,13 +14,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.ana.volunteerwork.database.Database;
+import com.example.ana.volunteerwork.database.Evento;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     FragmentManager fragmentManager;
+    DatabaseReference db;
+    Database helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,22 @@ public class MainActivity extends AppCompatActivity
             }
         });*/
 
+
+        // INITIALIZE FIREBASE DB
+        db = FirebaseDatabase.getInstance().getReference();
+        helper = new Database(db);
+
+        /** TESTE DE INSERIR NO BANCO, É SÓ SEGUIR ESSA ESTRUTURA QUE DÁ SUCESSO!!!
+
+        // SAVE INTO FIREBASE
+        Evento teste  = new Evento("Evento Doido","Eu mesmo", "Vai ser foda! ");
+        if(helper.save(teste)) {
+            Toast.makeText(this, "SALVOU NO BANCO!", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "NÃO SALVOU NO BANCO!", Toast.LENGTH_SHORT).show();
+        }
+         **/
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -46,6 +68,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
     @Override

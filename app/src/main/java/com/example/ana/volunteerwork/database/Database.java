@@ -1,10 +1,16 @@
 package com.example.ana.volunteerwork.database;
 
+import android.service.autofill.Dataset;
+
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 /**
  * Created by gabri on 03/12/2017.
@@ -12,39 +18,73 @@ import com.google.firebase.database.ValueEventListener;
 
 public class Database {
 
-    /**
-     * Inserir valores ao banco de dados
-     * @param mChildId Id do dado inserido no banco de dados
-     * @param ChildValue O que ser inserido no banco de dados
-     */
-    public static void Inserir(String mChildId,String ChildValue) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference mRef = database.getReference(mChildId);
-        mRef.setValue(ChildValue);
-    }
+    DatabaseReference db;
+    Boolean saved;
+    ArrayList<Evento> eventos = new ArrayList<>();
+
 
     /**
-     * Remover valores do banco de dados
-     * @param mChildId Id do dado a ser removido do banco de dados
+     * PASS DATA BAE REFERENCE
      */
 
-    public static void Remover(String mChildId) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference mRef = database.getReference(mChildId);
-        mRef.removeValue();
+    public Database (DatabaseReference db) {
+        this.db = db;
     }
 
-    public static void Ler(final String mChildId) {
-        String retorno;
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference mRef = database.getReference(mChildId);
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+    //WRITE IF NOT NULL
+
+    /**
+     *
+     * @param evento objeto a ser salvo
+     * @return
+     */
+    public Boolean save(Evento evento) {
+        if (evento == null ) {
+            saved = false;
+        } else {
+            try {
+                db.child("Evento").push().setValue(evento);
+                saved=true;
+            } catch (DatabaseException e) {
+                e.printStackTrace();
+                saved = false;
+            }
+        }
+        return saved;
+    }
+
+    // IMPLEMENT FETCH DATA AND FILL ARRAYLIST
+
+    private void fetchData(DataSnapshot dataSnapshot) {
+        eventos.clear();
+
+        for(DataSnapshot ds : dataSnapshot.getChildren()) {
+            Evento evento = ds.getValue(Evento.class);
+            eventos.add(evento);
+        }
+    }
+
+    // RETRIEVE
+    public ArrayList<Evento> retrieve() {
+        db.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String childValue = String.valueOf(dataSnapshot.getValue());
-                // Cria um objeto ou alguma coisa pra ser lida daqui
-                // Inserir(mChildId,childValue); <- Teste inserindo um valor com que foi lido do BD
-                // TextView.setText(ChildValue)
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                fetchData(dataSnapshot);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                fetchData(dataSnapshot);
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
             }
 
             @Override
@@ -53,9 +93,8 @@ public class Database {
             }
         });
 
+        return eventos;
     }
-
-
 
 
 }
