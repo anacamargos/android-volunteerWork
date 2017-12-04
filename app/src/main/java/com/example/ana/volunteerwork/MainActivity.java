@@ -21,12 +21,15 @@ import com.example.ana.volunteerwork.database.Evento;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     FragmentManager fragmentManager;
     DatabaseReference db;
     Database helper;
+    ArrayList<Evento> eventos,participando,organizando;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,11 @@ public class MainActivity extends AppCompatActivity
         // INITIALIZE FIREBASE DB
         db = FirebaseDatabase.getInstance().getReference();
         helper = new Database(db);
+
+
+        // LISTA COM OS EVENTOS SALVOS NO BANCO DE DADOS
+
+        eventos = helper.retrieve();
 
         /**
         //TESTE DE INSERIR NO BANCO, É SÓ SEGUIR ESSA ESTRUTURA QUE DÁ SUCESSO!!!

@@ -96,5 +96,18 @@ public class Database {
         return eventos;
     }
 
+    public ArrayList<Evento> retrieveParticipando() {
+        ArrayList<Evento> retorno = retrieve();
+
+        return retorno;
+
+    }
+
+    public ArrayList<Evento> retrieveOrganizando() {
+        ArrayList<Evento> retorno = retrieve();
+
+        return retorno;
+    }
+
 
 }
