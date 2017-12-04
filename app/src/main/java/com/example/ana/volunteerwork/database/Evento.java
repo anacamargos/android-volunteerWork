@@ -5,23 +5,18 @@ package com.example.ana.volunteerwork.database;
  */
 
 public class Evento {
-    String nome,organizador,descricao;
+    String nome,descricao, datIni, datFim, horaIni, horaFim, endereco;
 
     public Evento() {
     }
 
     public Evento(String nome, String organizador, String descricao) {
         this.nome = nome;
-        this.organizador = organizador;
         this.descricao = descricao;
     }
 
     public String getNome() {
         return nome;
-    }
-
-    public String getOrganizador() {
-        return organizador;
     }
 
     public String getDescricao() {
@@ -30,10 +25,6 @@ public class Evento {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public void setOrganizador(String organizador) {
-        this.organizador = organizador;
     }
 
     public void setDescricao(String descricao) {
