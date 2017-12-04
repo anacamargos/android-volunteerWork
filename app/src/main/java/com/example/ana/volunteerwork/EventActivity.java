@@ -2,6 +2,7 @@ package com.example.ana.volunteerwork;
 
 import android.content.Intent;
 import android.provider.CalendarContract;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -122,5 +123,17 @@ public class EventActivity extends AppCompatActivity {
         intent2.putExtra(CalendarContract.Events.TITLE, nomeEvento);
 
         startActivity(intent2);
+    }
+
+    public void enviarLinkedin ( View view ) {
+        String mensagem= "";
+        Intent intent = ShareCompat.IntentBuilder.from(EventActivity.this).setType("text/plain")
+                .setText(mensagem).getIntent();
+        intent.setPackage("com.linkedin.android");
+        intent.setAction(Intent.ACTION_SEND);
+        if ( intent.resolveActivity(getPackageManager()) != null ) {
+            startActivity(intent);
+        }
+
     }
 }
