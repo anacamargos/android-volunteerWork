@@ -10,11 +10,18 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.ana.volunteerwork.database.Database;
 import com.example.ana.volunteerwork.database.Evento;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
 
 public class CadastroEventoActivity extends AppCompatActivity {
+
+    DatabaseReference db;
+    Database helper;
+
 
     EditText nomeEventoET;
     EditText desEventoET;
@@ -32,6 +39,12 @@ public class CadastroEventoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro_evento);
+
+
+        // INITIALIZE FIREBASE DB
+        db = FirebaseDatabase.getInstance().getReference();
+        helper = new Database(db);
+
 
         nomeEventoET = (EditText) findViewById(R.id.nomeEvento);
         desEventoET = (EditText) findViewById(R.id.desEvento);
@@ -83,14 +96,14 @@ public class CadastroEventoActivity extends AppCompatActivity {
     DatePickerDialog.OnDateSetListener d = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int selectedYear, int selectedMonth, int selectedDay) {
-            datFimET.setText(selectedDay+"/"+selectedMonth+"/"+selectedYear);
+            datFimET.setText(selectedDay+"/"+(selectedMonth+1)+"/"+selectedYear);
             nCurrentDate.set(selectedYear,selectedMonth,selectedDay);
         }
     };
     DatePickerDialog.OnDateSetListener g = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int selectedYear, int selectedMonth, int selectedDay) {
-            datIniET.setText(selectedDay+"/"+selectedMonth+"/"+selectedYear);
+            datIniET.setText(selectedDay+"/"+(selectedMonth+1)+"/"+selectedYear);
             nCurrentDate.set(selectedYear,selectedMonth,selectedDay);
         }
     };
@@ -142,17 +155,25 @@ public class CadastroEventoActivity extends AppCompatActivity {
         }
     };
     public void cadastrarEvento (View view) {
+
+
         if ( validaCampo() == false) {
 
-            String nome = nomeEventoET.toString();
-            String descricao = desEventoET.toString();
-            String endEvento = endEventoET.toString();
-            String datIni = datIniET.toString();
-            String datFim = datFimET.toString();
-            String horaIni = horaIniET.toString();
-            String horaFim = horaFimET.toString();
+            String nome = nomeEventoET.getText().toString();
+            String descricao = desEventoET.getText().toString();
+            String endEvento = endEventoET.getText().toString();
+            String datIni = datIniET.getText().toString();
+            String datFim = datFimET.getText().toString();
+            String horaIni = horaIniET.getText().toString();
+            String horaFim = horaFimET.getText().toString();
 
             Evento novoEvento = new Evento (nome, descricao,datIni,datFim,horaIni,horaFim,endEvento);
+
+            if(helper.save(novoEvento)) {
+                Toast.makeText(this, "Evento criado!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "NÃO SALVOU NO BANCO!", Toast.LENGTH_SHORT).show();
+            }
 
             setResult(RESULT_OK);
             finish();

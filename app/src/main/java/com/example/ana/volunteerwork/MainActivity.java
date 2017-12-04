@@ -49,7 +49,8 @@ public class MainActivity extends AppCompatActivity
         db = FirebaseDatabase.getInstance().getReference();
         helper = new Database(db);
 
-        /**TESTE DE INSERIR NO BANCO, É SÓ SEGUIR ESSA ESTRUTURA QUE DÁ SUCESSO!!!
+        /**
+        //TESTE DE INSERIR NO BANCO, É SÓ SEGUIR ESSA ESTRUTURA QUE DÁ SUCESSO!!!
 
         // SAVE INTO FIREBASE
         Evento teste = new Evento("Evento doido", "Só vai dar nois",
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             Toast.makeText(this, "NÃO SALVOU NO BANCO!", Toast.LENGTH_SHORT).show();
         }
-         */
+        */
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
