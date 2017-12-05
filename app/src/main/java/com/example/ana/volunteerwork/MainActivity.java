@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity
             ft.commit();
 
             //FragmentTransaction ft = fragmentManager.beginTransaction().replace(R.id.frame_layout, new EventTransitionFragment()).commit();
-        }  else if (id == R.id.nav_profile) {
+        } /* else if (id == R.id.nav_profile) {
 
         } /*else if (id == R.id.nav_share) {
 

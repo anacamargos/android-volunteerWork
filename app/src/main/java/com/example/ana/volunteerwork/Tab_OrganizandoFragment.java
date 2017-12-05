@@ -52,10 +52,33 @@ public class Tab_OrganizandoFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tab__organizando, container, false);
 
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerViewAdapter = new RecyclerViewAdapter(listaDeEventos);
+        recyclerView.setAdapter(recyclerViewAdapter);
+
         db = FirebaseDatabase.getInstance().getReference();
         helper = new Database(db);
 
-        startarValores();
+        db.child("Evento").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                listaDeEventos.clear();
+                for(DataSnapshot child : children) {
+                    Evento evento = child.getValue(Evento.class);
+                    //Toast.makeText(getApplicationContext(), evento.getNome(), Toast.LENGTH_SHORT).show();
+                    listaDeEventos.add(evento);
+                }
+                recyclerViewAdapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
 
 
@@ -115,12 +138,18 @@ public class Tab_OrganizandoFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
     private void startarValores() {
 
         db.child("Evento").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                listaDeEventos.clear();
                 for(DataSnapshot child : children) {
                     Evento evento = child.getValue(Evento.class);
                     //Toast.makeText(getApplicationContext(), evento.getNome(), Toast.LENGTH_SHORT).show();
