@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.ana.volunteerwork.database.Evento;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -25,6 +26,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -42,6 +48,7 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
     private LocationManager locationManager;
     private static final String TAG = "MapsActivity";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    ArrayList<Evento> listaDeEventos;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,7 +97,7 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
+        listaDeEventos = new ArrayList<Evento>();
         try {
             locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
             Criteria criteria = new Criteria();
@@ -113,9 +120,6 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
 
             //Log.e(TAG, "Error", ex);
         }
-
-
-
         // Add a marker in Sydney and move the camera
         /*LatLng sydney = new LatLng(-33.87365, 151.20689);
 
@@ -146,14 +150,58 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
             List<Address> enderecos = geocoder.getFromLocationName("Rua Pistóia, Pampulha, Bandeirantes, BH", 1);
             if (enderecos.size() > 0) {
                 Log.v("tag", "coordenadas " + enderecos.get(0).getLatitude() + ", " + enderecos.get(0).getLongitude());
-                Log.v("tag", "coordenadas " + enderecos.get(0).getLatitude() + ", " + enderecos.get(0).getLongitude());
-                Log.v("tag", "coordenadas " + enderecos.get(0).getLatitude() + ", " + enderecos.get(0).getLongitude());
-                Log.v("tag", "coordenadas " + enderecos.get(0).getLatitude() + ", " + enderecos.get(0).getLongitude());
-                Log.v("tag", "coordenadas " + enderecos.get(0).getLatitude() + ", " + enderecos.get(0).getLongitude());
-                Log.v("tag", "coordenadas " + enderecos.get(0).getLatitude() + ", " + enderecos.get(0).getLongitude());
-                Log.v("tag", "coordenadas " + enderecos.get(0).getLatitude() + ", " + enderecos.get(0).getLongitude());
             }
         } catch (Exception e) {
+
+        }
+
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = db.getReference();
+
+        databaseReference.child("Evento").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for(DataSnapshot child : children) {
+                    Evento evento = child.getValue(Evento.class);
+                    //Toast.makeText(getApplicationContext(), evento.getNome(), Toast.LENGTH_SHORT).show();
+                    listaDeEventos.add(evento);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        if ( listaDeEventos.isEmpty()) {
+            System.out.println("TA VAZIOOOOOOOOOOOOOOOOOOOO");
+            System.out.println("TA VAZIOOOOOOOOOOOOOOOOOOOO");
+            System.out.println("TA VAZIOOOOOOOOOOOOOOOOOOOO");
+            System.out.println("TA VAZIOOOOOOOOOOOOOOOOOOOO");
+            System.out.println("TA VAZIOOOOOOOOOOOOOOOOOOOO");
+            System.out.println("TA VAZIOOOOOOOOOOOOOOOOOOOO");
+        }
+
+        for ( int i = 0; i < listaDeEventos.size(); i ++ ) {
+
+            try {
+                Geocoder geocoder = new Geocoder(getContext());
+                //List<Address> enderecos = geocoder.getFromLocationName("Av. Sampaio Vidal, Centro, Marília, SP", 1);
+                List<Address> enderecos = geocoder.getFromLocationName(listaDeEventos.get(i).getEndereco(), 1);
+                if (enderecos.size() > 0) {
+
+                    LatLng novaLat = new LatLng(enderecos.get(0).getLatitude(), enderecos.get(0).getLongitude());
+                    MarkerOptions marker2 = new MarkerOptions();
+                    marker.position(novaLat);
+                    marker.title("Marker in Sydney");
+                    mMap.addMarker(marker2);
+
+                    Log.v("tag", "coordenadas " + enderecos.get(0).getLatitude() + ", " + enderecos.get(0).getLongitude());
+                }
+            } catch (Exception e) {
+
+            }
 
         }
 
