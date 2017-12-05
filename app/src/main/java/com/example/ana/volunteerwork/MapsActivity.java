@@ -403,10 +403,6 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
         } catch (Exception e) {
 
         }
-
-//
-//
-//
 //        if ( listaDeEventos.isEmpty()) {
 //            System.out.println("TA VAZIOOOOOOOOOOOOOOOOOOOO");
 //            System.out.println("TA VAZIOOOOOOOOOOOOOOOOOOOO");

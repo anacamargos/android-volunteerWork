@@ -38,12 +38,12 @@ public class Database {
      * @param evento objeto a ser salvo
      * @return
      */
-    public Boolean save(Evento evento) {
+    public Boolean save(Evento evento, String child) {
         if (evento == null ) {
             saved = false;
         } else {
             try {
-                db.child("Evento").push().setValue(evento);
+                db.child(child).push().setValue(evento);
                 saved=true;
             } catch (DatabaseException e) {
                 e.printStackTrace();

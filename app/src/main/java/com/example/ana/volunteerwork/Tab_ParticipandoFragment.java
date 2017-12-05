@@ -10,7 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.ana.volunteerwork.database.Database;
 import com.example.ana.volunteerwork.database.Evento;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -24,6 +30,8 @@ public class Tab_ParticipandoFragment extends Fragment {
     RecyclerView.LayoutManager layoutManager;
     RecyclerViewAdapter recyclerViewAdapter;
     ArrayList<Evento> listaDeEventosParticipando;
+    DatabaseReference db;
+    Database helper;
 
 
     public Tab_ParticipandoFragment() {
@@ -38,6 +46,28 @@ public class Tab_ParticipandoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tab__participando, container, false);
 
         listaDeEventosParticipando = new ArrayList<Evento>();
+
+        db = FirebaseDatabase.getInstance().getReference();
+        helper = new Database(db);
+
+        db.child("Organizando").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                listaDeEventosParticipando.clear();
+                for(DataSnapshot child : children) {
+                    Evento evento = child.getValue(Evento.class);
+                    //Toast.makeText(getApplicationContext(), evento.getNome(), Toast.LENGTH_SHORT).show();
+                    listaDeEventosParticipando.add(evento);
+                }
+                recyclerViewAdapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
         Evento evento = new Evento ("Festa do Miguel", "Muita comida!", "06/12/2017","07/12/2017", "10:00", "10:00", "Rua Pistóia, 325");
         Evento eventoNovo = new Evento ("Festa do Joaozinho", "Só track boa", "11/12/2017","12/12/2017", "10:00", "10:00", "Rua Gongalves Dias, 2132");

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.ana.volunteerwork.database.Database;
 import com.example.ana.volunteerwork.database.Evento;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -169,8 +170,16 @@ public class CadastroEventoActivity extends AppCompatActivity {
 
             Evento novoEvento = new Evento (nome, descricao,datIni,datFim,horaIni,horaFim,endEvento);
 
-            if(helper.save(novoEvento)) {
+            if(helper.save(novoEvento,"Organizando")) {
                 Toast.makeText(this, "Evento criado!", Toast.LENGTH_SHORT).show();
+                try {
+                    db.child("Evento").push().setValue(novoEvento);
+                } catch (DatabaseException e) {
+                    e.printStackTrace();
+                }
+
+
+
             } else {
                 Toast.makeText(this, "NÃO SALVOU NO BANCO!", Toast.LENGTH_SHORT).show();
             }
