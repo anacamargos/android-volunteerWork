@@ -112,11 +112,19 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
             ActivityCompat.checkPermissions(this, new String[] {
                             Manifest.permission.ACCESS_FINE_LOCATION,
                             Manifest.permission.ACCESS_COARSE_LOCATION },
-                    TAG_CODE_PERMISSION_LOCATION);
+                    TAG_CODE_PERMISSION_LOCATION);*/
 
             AppCompatActivity activity = (AppCompatActivity) getActivity();
             PermissionUtils.requestPermission(activity, LOCATION_PERMISSION_REQUEST_CODE,
-                    Manifest.permission.ACCESS_FINE_LOCATION, true);*/
+                    Manifest.permission.ACCESS_FINE_LOCATION, true);
+            locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            Criteria criteria = new Criteria();
+            String provider = locationManager.getBestProvider(criteria, true);
+
+            mMap = googleMap;
+            //mMap.setOnMapClickListener(this);
+            mMap.getUiSettings().setZoomControlsEnabled(true);
+            mMap.setMyLocationEnabled(true);
 
             //Log.e(TAG, "Error", ex);
         }
@@ -194,7 +202,7 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
                     LatLng novaLat = new LatLng(enderecos.get(0).getLatitude(), enderecos.get(0).getLongitude());
                     MarkerOptions marker2 = new MarkerOptions();
                     marker.position(novaLat);
-                    marker.title("Marker in Sydney");
+                    marker.title(listaDeEventos.get(i).getNome());
                     mMap.addMarker(marker2);
 
                     Log.v("tag", "coordenadas " + enderecos.get(0).getLatitude() + ", " + enderecos.get(0).getLongitude());
@@ -213,7 +221,7 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
 
     @Override
     public void onLocationChanged(Location location) {
-        Toast.makeText(getActivity(), "Posição Alterada", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Posição Alterada", Toast.LENGTH_SHORT).show();
     }
 
     @Override
