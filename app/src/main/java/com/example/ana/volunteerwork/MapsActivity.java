@@ -57,6 +57,7 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        /*
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = db.getReference();
 
@@ -69,9 +70,28 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
                     //Toast.makeText(getApplicationContext(), evento.getNome(), Toast.LENGTH_SHORT).show();
                     Log.d("TESTE",evento.getNome());
                     listaDeEventos.add(evento);
+                    try {
+                        Geocoder geocoder = new Geocoder(getContext());
+                        //List<Address> enderecos = geocoder.getFromLocationName("Av. Sampaio Vidal, Centro, Marília, SP", 1);
+                        List<Address> enderecos = geocoder.getFromLocationName(evento.getEndereco(), 1);
+                        Log.d("TESTE", evento.getEndereco());
+                        //if (enderecos.size() > 0) {
+
+                            LatLng novaLat = new LatLng(enderecos.get(0).getLatitude(), enderecos.get(0).getLongitude());
+                            MarkerOptions marker2 = new MarkerOptions();
+                            marker.position(novaLat);
+                            marker.title(evento.getNome());
+                            mMap.addMarker(marker2);
+
+                            Log.d("TESTE", "PASSEI AQUUIIII");
+
+                        //}
+                    } catch ( Exception e ) {
+                        Log.d("TESTE", "PASSEI AQUUIIII AAFFFFFF");
+                    }
                 }
-                Log.d("TESTE",listaDeEventos.toString());
-                for ( int i = 0; i < listaDeEventos.size(); i ++ ) {
+                //Log.d("TESTE",listaDeEventos.toString());
+                /*for ( int i = 0; i < listaDeEventos.size(); i ++ ) {
 
                     try {
                         Geocoder geocoder = new Geocoder(getContext());
@@ -131,6 +151,8 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
 //
 //            }
 //        });
+
+*/
 
         getMapAsync(this);
     }
@@ -229,6 +251,87 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = db.getReference();
+
+        ChildEventListener childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for(DataSnapshot child : children) {
+                    Evento evento = child.getValue(Evento.class);
+                    //Toast.makeText(getApplicationContext(), evento.getNome(), Toast.LENGTH_SHORT).show();
+                    Log.d("TESTE",evento.getNome());
+                    listaDeEventos.add(evento);
+                    try {
+                        Geocoder geocoder = new Geocoder(getContext());
+                        //List<Address> enderecos = geocoder.getFromLocationName("Av. Sampaio Vidal, Centro, Marília, SP", 1);
+                        List<Address> enderecos = geocoder.getFromLocationName(evento.getEndereco(), 1);
+                        Log.d("TESTE", evento.getEndereco());
+                        //if (enderecos.size() > 0) {
+
+                        LatLng nova = new LatLng(enderecos.get(0).getLatitude(), enderecos.get(0).getLongitude());
+                        marker = new MarkerOptions();
+                        marker.position(nova);
+                        marker.title(evento.getNome());
+                        mMap.addMarker(marker);
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(nova));
+
+                        Log.d("TESTE", "PASSEI AQUUIIII");
+
+                        //}
+                    } catch ( Exception e ) {
+                        Log.d("TESTE", "PASSEI AQUUIIII AAFFFFFF");
+                    }
+                }
+                //Log.d("TESTE",listaDeEventos.toString());
+                /*for ( int i = 0; i < listaDeEventos.size(); i ++ ) {
+
+                    try {
+                        Geocoder geocoder = new Geocoder(getContext());
+                        //List<Address> enderecos = geocoder.getFromLocationName("Av. Sampaio Vidal, Centro, Marília, SP", 1);
+                        List<Address> enderecos = geocoder.getFromLocationName(listaDeEventos.get(i).getEndereco(), 1);
+                        if (enderecos.size() > 0) {
+
+                            LatLng novaLat = new LatLng(enderecos.get(0).getLatitude(), enderecos.get(0).getLongitude());
+                            MarkerOptions marker2 = new MarkerOptions();
+                            marker.position(novaLat);
+                            marker.title(listaDeEventos.get(i).getNome());
+                            mMap.addMarker(marker2);
+
+                            Log.v("tag", "coordenadas " + enderecos.get(0).getLatitude() + ", " + enderecos.get(0).getLongitude());
+                        }
+                    } catch (Exception e) {
+
+                    }
+
+                }*/
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        databaseReference.addChildEventListener(childEventListener);
+
+
         try {
             locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
             Criteria criteria = new Criteria();
@@ -269,7 +372,7 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
 
-        LatLng nova = new LatLng(-19.8566726, -43.9869368);
+        /*LatLng nova = new LatLng(-19.8566726, -43.9869368);
 
         marker = new MarkerOptions();
         marker.position(nova);
@@ -277,7 +380,7 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
 
         mMap.addMarker(marker);
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(nova));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(nova));*/
 
         // Retorna o endereço de uma lat e long
         // new Conexao().execute( String.valueOf(nova.latitude), String.valueOf(nova.longitude) );
@@ -289,6 +392,13 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
             List<Address> enderecos = geocoder.getFromLocationName("Rua Pistóia, Pampulha, Bandeirantes, BH", 1);
             if (enderecos.size() > 0) {
                 Log.v("tag", "coordenadas " + enderecos.get(0).getLatitude() + ", " + enderecos.get(0).getLongitude());
+
+                /*LatLng nova = new LatLng(enderecos.get(0).getLatitude(), enderecos.get(0).getLongitude());
+                marker = new MarkerOptions();
+                marker.position(nova);
+                marker.title("Marker in Pistoia");
+                mMap.addMarker(marker);
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(nova));*/
             }
         } catch (Exception e) {
 
@@ -327,6 +437,8 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
 //            }
 //
 //        }
+
+
 
 
 

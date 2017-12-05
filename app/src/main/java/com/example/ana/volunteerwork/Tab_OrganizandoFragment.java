@@ -188,21 +188,7 @@ public class Tab_OrganizandoFragment extends Fragment {
         });
         if(listaDeEventos.isEmpty()) {
             System.out.println("TA VAZIOOOO");
-            System.out.println("TA VAZIOOOO");
-            System.out.println("TA VAZIOOOO");
-            System.out.println("TA VAZIOOOO");
-            System.out.println("TA VAZIOOOO");
-            System.out.println("TA VAZIOOOO");
-            System.out.println("TA VAZIOOOO");
         } else {
-            System.out.println(listaDeEventos.get(0).getNome());
-            System.out.println(listaDeEventos.get(0).getNome());
-            System.out.println(listaDeEventos.get(0).getNome());
-            System.out.println(listaDeEventos.get(0).getNome());
-            System.out.println(listaDeEventos.get(0).getNome());
-            System.out.println(listaDeEventos.get(0).getNome());
-            System.out.println(listaDeEventos.get(0).getNome());
-            System.out.println(listaDeEventos.get(0).getNome());
             System.out.println(listaDeEventos.get(0).getNome());
         }
 
