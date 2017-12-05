@@ -1,6 +1,7 @@
 package com.example.ana.volunteerwork;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
@@ -9,8 +10,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.ana.volunteerwork.database.Database;
 import com.example.ana.volunteerwork.database.Evento;
@@ -21,14 +24,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     FragmentManager fragmentManager;
-    DatabaseReference db;
     Database helper;
-    ArrayList<Evento> eventos,participando,organizando;
+    final static ArrayList<Evento> eventos = new ArrayList<>();
+    ArrayList<Evento> participando,organizando;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +50,24 @@ public class MainActivity extends AppCompatActivity
             }
         });*/
 
-
         // INITIALIZE FIREBASE DB
-        db = FirebaseDatabase.getInstance().getReference();
-        helper = new Database(db);
+       FirebaseDatabase db = FirebaseDatabase.getInstance();
+       DatabaseReference databaseReference = db.getReference();
+       databaseReference.child("Evento").addValueEventListener(new ValueEventListener() {
+           @Override
+           public void onDataChange(DataSnapshot dataSnapshot) {
+               Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+               for(DataSnapshot child : children) {
+                   Evento evento = child.getValue(Evento.class);
+                   //Toast.makeText(getApplicationContext(), evento.getNome(), Toast.LENGTH_SHORT).show();
+                   eventos.add(evento);
+               }
+    }
+           @Override
+           public void onCancelled(DatabaseError databaseError) {
 
-
-        // LISTA COM OS EVENTOS SALVOS NO BANCO DE DADOS
-        eventos = new ArrayList<>();
-        retrieve();
+           }
+       });
 
 
 
@@ -118,6 +131,8 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
+//
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         fragmentManager = getSupportFragmentManager();
@@ -129,7 +144,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_evento) {
 
             FragmentTransaction ft = fragmentManager.beginTransaction();//.replace(R.id.coordinator_layout, new TransitionFragment()).commit();
-            //Bundle args = new Bundle();
+            Bundle args = new Bundle();
+            //args.putParcelableArrayList("list", (ArrayList<? extends Parcelable>) eventos);
             //args.putString("subjectName",item.getTitle().toString());
             EventTransitionFragment fragment = new EventTransitionFragment();
             //fragment.setArguments(args);
@@ -148,25 +164,5 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public void retrieve() {
-        if(!eventos.isEmpty()) {
-            eventos.clear();
-        }
-        db.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Evento evento = ds.getValue(Evento.class);
-                    eventos.add(evento);
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
     }
 }

@@ -1,5 +1,7 @@
 package com.example.ana.volunteerwork;
 
+import android.*;
+import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -73,6 +75,8 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         locationManager.removeUpdates(this);
 
+
+
     }
 
     /**
@@ -97,13 +101,13 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
             mMap.getUiSettings().setZoomControlsEnabled(true);
             mMap.setMyLocationEnabled(true);
         } catch (SecurityException ex) {
-
-            /*ActivityCompat.requestPermissions(this, new String[] {
+            /*
+            ActivityCompat.checkPermissions(this, new String[] {
                             Manifest.permission.ACCESS_FINE_LOCATION,
                             Manifest.permission.ACCESS_COARSE_LOCATION },
-                    TAG_CODE_PERMISSION_LOCATION);*/
+                    TAG_CODE_PERMISSION_LOCATION);
 
-            /*AppCompatActivity activity = (AppCompatActivity) getActivity();
+            AppCompatActivity activity = (AppCompatActivity) getActivity();
             PermissionUtils.requestPermission(activity, LOCATION_PERMISSION_REQUEST_CODE,
                     Manifest.permission.ACCESS_FINE_LOCATION, true);*/
 

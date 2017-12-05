@@ -16,8 +16,11 @@ import android.view.ViewGroup;
 
 import com.example.ana.volunteerwork.database.Database;
 import com.example.ana.volunteerwork.database.Evento;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -27,10 +30,11 @@ import java.util.ArrayList;
  */
 public class Tab_OrganizandoFragment extends Fragment {
 
+
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerViewAdapter recyclerViewAdapter;
-    ArrayList<Evento> listaDeEventos;
+    ArrayList<Evento> listaDeEventos =  new ArrayList<>();
     public static final int RESULT_OK = 0;
 
     DatabaseReference db;
@@ -51,11 +55,18 @@ public class Tab_OrganizandoFragment extends Fragment {
         db = FirebaseDatabase.getInstance().getReference();
         helper = new Database(db);
 
-        listaDeEventos = new ArrayList<Evento>();
-        Evento evento = new Evento ("Festa da Ana", "Melhor Festa!", "04/12/2017","05/12/2017", "10:00", "10:00", "Rua Pistóia, 325");
-        Evento eventoNovo = new Evento ("Festa do Gabriel", "Uhuuul!", "10/12/2017","11/12/2017", "10:00", "10:00", "Rua Gongalves Dias, 2132");
-        listaDeEventos.add(evento);
-        listaDeEventos.add(eventoNovo);
+        startarValores();
+
+
+
+
+//        listaDeEventos = new ArrayList<Evento>();
+//        Evento evento = new Evento ("Festa da Ana", "Melhor Festa!", "04/12/2017","05/12/2017", "10:00", "10:00", "Rua Pistóia, 325");
+//        Evento eventoNovo = new Evento ("Festa do Gabriel", "Uhuuul!", "10/12/2017","11/12/2017", "10:00", "10:00", "Rua Gongalves Dias, 2132");
+//        listaDeEventos.add(evento);
+//        listaDeEventos.add(eventoNovo);
+
+
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         layoutManager = new LinearLayoutManager(getActivity());
@@ -104,10 +115,48 @@ public class Tab_OrganizandoFragment extends Fragment {
         return view;
     }
 
+    private void startarValores() {
+
+        db.child("Evento").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for(DataSnapshot child : children) {
+                    Evento evento = child.getValue(Evento.class);
+                    //Toast.makeText(getApplicationContext(), evento.getNome(), Toast.LENGTH_SHORT).show();
+                    listaDeEventos.add(evento);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        this.listaDeEventos = helper.retrieve();
+
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = db.getReference();
+
+        databaseReference.child("Evento").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for(DataSnapshot child : children) {
+                    Evento evento = child.getValue(Evento.class);
+                    //Toast.makeText(getApplicationContext(), evento.getNome(), Toast.LENGTH_SHORT).show();
+                    listaDeEventos.add(evento);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         if(listaDeEventos.isEmpty()) {
             System.out.println("TA VAZIOOOO");
             System.out.println("TA VAZIOOOO");

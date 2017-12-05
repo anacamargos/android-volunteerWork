@@ -56,7 +56,6 @@ public class Database {
     // IMPLEMENT FETCH DATA AND FILL ARRAYLIST
 
     private void fetchData(DataSnapshot dataSnapshot) {
-        eventos.clear();
 
         for(DataSnapshot ds : dataSnapshot.getChildren()) {
             Evento evento = ds.getValue(Evento.class);
@@ -66,48 +65,20 @@ public class Database {
 
     // RETRIEVE
     public ArrayList<Evento> retrieve() {
-        db.addChildEventListener(new ChildEventListener() {
+        db.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 fetchData(dataSnapshot);
             }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                fetchData(dataSnapshot);
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
-
         return eventos;
     }
 
-    public ArrayList<Evento> retrieveParticipando() {
-        ArrayList<Evento> retorno = retrieve();
 
-        return retorno;
-
-    }
-
-    public ArrayList<Evento> retrieveOrganizando() {
-        ArrayList<Evento> retorno = retrieve();
-
-        return retorno;
-    }
 
 
 }

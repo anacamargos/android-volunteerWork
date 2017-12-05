@@ -1,11 +1,13 @@
 package com.example.ana.volunteerwork;
 
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.ana.volunteerwork.database.Database;
 import com.example.ana.volunteerwork.database.Evento;
 
 import java.util.ArrayList;
@@ -20,6 +22,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     ArrayList<Evento> listaDeEventos;
     View view;
     ViewHolder viewHolder;
+    FragmentManager fragmentManager;
+    Database helper;
+    final static ArrayList<Evento> eventos = new ArrayList<>();
 
     public RecyclerViewAdapter ( ArrayList<Evento> listaDeEventos) {
         this.listaDeEventos = listaDeEventos;

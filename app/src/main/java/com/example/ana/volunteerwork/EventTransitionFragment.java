@@ -12,6 +12,17 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.example.ana.volunteerwork.database.Database;
+import com.example.ana.volunteerwork.database.Evento;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 
 /**
@@ -22,6 +33,8 @@ public class EventTransitionFragment extends Fragment {
     private AppBarLayout appBar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+
+
     //private static final String ARG_PARAM = "";
 
 
