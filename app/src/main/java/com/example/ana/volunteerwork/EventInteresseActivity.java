@@ -3,6 +3,7 @@ package com.example.ana.volunteerwork;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +37,7 @@ public class EventInteresseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event);
+        setContentView(R.layout.activity_participarevento);
 
         // INITIALIZE FIREBASE DB
         db = FirebaseDatabase.getInstance().getReference();
@@ -110,15 +111,20 @@ public class EventInteresseActivity extends AppCompatActivity {
         return retorno;
     }
 
-    public void manifestarInteresse() {
-        Evento e = new Evento(this.nomeEvento,this.desEvento,this.dataEventoIni,this.dataEventoFim
-        ,this.horaIniEvento,this.horaEndEvento,this.endEvento);
-
-        if(helper.save(e,"Participando")) {
-            Toast.makeText(this, "Cadastrado no Evento!", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "NÃO SALVOU NO BANCO!", Toast.LENGTH_SHORT).show();
+    public void manifestarInteresse(View view) {
+        Intent intent = getIntent();
+        if ( intent != null ) {
+            Bundle params = intent.getExtras();
+            if (params != null) {
+                Evento evento = (Evento) params.getSerializable("evento");
+                if(helper.save(evento,"Participando")) {
+                    Toast.makeText(this, "Cadastrado no Evento!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "NÃO SALVOU NO BANCO!", Toast.LENGTH_SHORT).show();
+                }
+            }
         }
+        finish();
 
     }
 }
