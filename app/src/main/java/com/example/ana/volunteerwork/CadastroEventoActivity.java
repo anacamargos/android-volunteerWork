@@ -39,7 +39,7 @@ public class CadastroEventoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cadastro_evento);
+        setContentView(R.layout.activity_participarevento);
 
 
         // INITIALIZE FIREBASE DB

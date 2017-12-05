@@ -79,7 +79,7 @@ public class EventTransitionFragment extends Fragment {
         public ViewPagerAdapter (FragmentManager fragmentManager) {
             super (fragmentManager);
         }
-        String [] tituloTabs= {"Organizando", "Participando"};
+        String [] tituloTabs= {"Organizando", "Participando","Todos Eventos"};
 
         @Override
         public Fragment getItem(int position) {
@@ -87,6 +87,7 @@ public class EventTransitionFragment extends Fragment {
             switch (position) {
                 case 0: return new Tab_OrganizandoFragment();
                 case 1: return new Tab_ParticipandoFragment();
+                case 2: return new Tab_EventosFragment();
             }
 
             return null;
@@ -94,7 +95,7 @@ public class EventTransitionFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
 
         @Override

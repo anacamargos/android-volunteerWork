@@ -50,7 +50,7 @@ public class Tab_ParticipandoFragment extends Fragment {
         db = FirebaseDatabase.getInstance().getReference();
         helper = new Database(db);
 
-        db.child("Organizando").addValueEventListener(new ValueEventListener() {
+        db.child("Participando").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
@@ -68,12 +68,12 @@ public class Tab_ParticipandoFragment extends Fragment {
             }
         });
 
-
-        Evento evento = new Evento ("Festa do Miguel", "Muita comida!", "06/12/2017","07/12/2017", "10:00", "10:00", "Rua Pistóia, 325");
-        Evento eventoNovo = new Evento ("Festa do Joaozinho", "Só track boa", "11/12/2017","12/12/2017", "10:00", "10:00", "Rua Gongalves Dias, 2132");
-
-        listaDeEventosParticipando.add(evento);
-        listaDeEventosParticipando.add(eventoNovo);
+//
+//        Evento evento = new Evento ("Festa do Miguel", "Muita comida!", "06/12/2017","07/12/2017", "10:00", "10:00", "Rua Pistóia, 325");
+//        Evento eventoNovo = new Evento ("Festa do Joaozinho", "Só track boa", "11/12/2017","12/12/2017", "10:00", "10:00", "Rua Gongalves Dias, 2132");
+//
+//        listaDeEventosParticipando.add(evento);
+//        listaDeEventosParticipando.add(eventoNovo);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         layoutManager = new LinearLayoutManager(getActivity());

@@ -140,6 +140,7 @@ public class EventActivity extends AppCompatActivity {
         startActivity(intent2);
     }
 
+
     public void enviarLinkedin ( View view ) {
         String mensagem= "";
         Intent intent = ShareCompat.IntentBuilder.from(EventActivity.this).setType("text/plain")
