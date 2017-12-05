@@ -2,10 +2,13 @@ package com.example.ana.volunteerwork;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -20,6 +23,16 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 public class MapsActivity extends SupportMapFragment implements OnMapReadyCallback, LocationListener {
 
@@ -108,7 +121,43 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
         mMap.addMarker(marker);
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
+
+        LatLng nova = new LatLng(-19.8566726, -43.9869368);
+
+        MarkerOptions marker = new MarkerOptions();
+        marker.position(nova);
+        marker.title("Marker in Sydney");
+
+        mMap.addMarker(marker);
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(nova));
+
+        // Retorna o endereço de uma lat e long
+        // new Conexao().execute( String.valueOf(nova.latitude), String.valueOf(nova.longitude) );
+
+        try {
+            Geocoder geocoder = new Geocoder(getContext());
+            //List<Address> enderecos = geocoder.getFromLocationName("Av. Sampaio Vidal, Centro, Marília, SP", 1);
+
+            List<Address> enderecos = geocoder.getFromLocationName("Rua Pistóia, Pampulha, Bandeirantes, BH", 1);
+            if (enderecos.size() > 0) {
+                Log.v("tag", "coordenadas " + enderecos.get(0).getLatitude() + ", " + enderecos.get(0).getLongitude());
+                Log.v("tag", "coordenadas " + enderecos.get(0).getLatitude() + ", " + enderecos.get(0).getLongitude());
+                Log.v("tag", "coordenadas " + enderecos.get(0).getLatitude() + ", " + enderecos.get(0).getLongitude());
+                Log.v("tag", "coordenadas " + enderecos.get(0).getLatitude() + ", " + enderecos.get(0).getLongitude());
+                Log.v("tag", "coordenadas " + enderecos.get(0).getLatitude() + ", " + enderecos.get(0).getLongitude());
+                Log.v("tag", "coordenadas " + enderecos.get(0).getLatitude() + ", " + enderecos.get(0).getLongitude());
+                Log.v("tag", "coordenadas " + enderecos.get(0).getLatitude() + ", " + enderecos.get(0).getLongitude());
+            }
+        } catch (Exception e) {
+
+        }
+
+
+
     }
+
+
 
     @Override
     public void onLocationChanged(Location location) {
@@ -130,5 +179,44 @@ public class MapsActivity extends SupportMapFragment implements OnMapReadyCallba
     public void onProviderDisabled(String s) {
         Toast.makeText(getActivity(), "Provider Desabilitado", Toast.LENGTH_SHORT).show();
 
+    }
+
+    class Conexao extends AsyncTask<String, String, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String url = "http://maps.googleapis.com/maps/api/geocode/xml?latlng="+ params[0] + "," + params[1];
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpGet request = new HttpGet(url);
+                InputStream in = httpclient.execute(request).getEntity().getContent();
+                BufferedReader br = null;
+                StringBuilder sb = new StringBuilder();
+                br = new BufferedReader(new InputStreamReader(in));
+                String line = br.readLine();
+                while (line != null) {
+                    sb.append(line);
+                    line = br.readLine();
+                }
+
+                String resposta = sb.toString();
+                 return resposta.substring(resposta.indexOf( "<formatted_address>" ) + 19, resposta.indexOf( "</formatted_address>" ));
+                //return sb.toString();
+            } catch ( Exception e ) {
+                return "Erro: " + e.getMessage();
+            }
+        }
+        @Override
+        protected void onPostExecute(String msg) {
+            //tvDescricao.setText( msg );
+            System.out.println(msg);
+            System.out.println(msg);
+            System.out.println(msg);
+            System.out.println(msg);
+            System.out.println(msg);
+            System.out.println(msg);
+            System.out.println(msg);
+            System.out.println(msg);
+            System.out.println(msg);
+        }
     }
 }
